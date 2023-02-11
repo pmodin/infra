@@ -1,5 +1,5 @@
 token := $(shell gopass hetzner-api)
-.SILENT: plan apply datacenters images
+.SILENT: plan apply destroy datacenters images server_types
 
 plan:
 	TF_VAR_hcloud_token="${token}" terraform plan
