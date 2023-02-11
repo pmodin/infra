@@ -1,0 +1,28 @@
+---
+- hosts: all
+  become: yes
+  gather_facts: no
+  name: psql configuration
+
+  pre_tasks:
+    - name: Wait 600 seconds for target connection to become reachable/usable
+      ansible.builtin.wait_for_connection:
+
+    - name: Gather facts for first time
+      ansible.builtin.setup:
+
+    - name: Install postgresql
+      ansible.builtin.apt:
+        name: postgresql-13
+        state: present
+        update_cache: yes
+
+  tasks:
+    - name: "Find out if PostgreSQL is initialized"
+      ansible.builtin.stat:
+        path: "/var/lib/pgsql/data/pg_hba.conf"
+      register: postgres_data
+
+  handlers:
+    - name: restart postgres
+      service: name=postgresql state=restarted

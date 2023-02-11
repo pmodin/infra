@@ -19,6 +19,10 @@ resource "hcloud_server" "primary" {
   depends_on = [
     hcloud_network_subnet.internal-subnet
   ]
+
+  provisioner "local-exec" {
+    command = "ANSIBLE_HOST_KEY_CHECKING=False pipenv run ansible-playbook -u root -i '${self.ipv4_address},' ansible/postgres.yml"
+  }
 }
 
 resource "hcloud_primary_ip" "primary_v4" {
