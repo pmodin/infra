@@ -1,10 +1,13 @@
 token := $(shell gopass hetzner-api)
 .SILENT: plan apply destroy datacenters images server_types
 
+pipenv:
+	pipenv install
+
 plan:
 	TF_VAR_hcloud_token="${token}" terraform plan
 
-apply:
+apply: pipenv
 	TF_VAR_hcloud_token="${token}" terraform apply
 
 destroy:
