@@ -6,8 +6,8 @@ resource "hcloud_server" "node-1" {
   ssh_keys = [hcloud_ssh_key.default.id]
 
   network {
-    network_id = hcloud_network.internal.id
-    ip         = "10.0.2.1"
+    network_id = hcloud_network.nat-network.id
+    ip         = "10.0.0.3"
   }
 
   public_net {
@@ -15,9 +15,26 @@ resource "hcloud_server" "node-1" {
     ipv6_enabled = false
   }
 
+  user_data = file("${path.module}/user_data-node.yaml")
+
   depends_on = [
-    hcloud_network_subnet.internal-subnet
+    hcloud_network_subnet.nat-network,
+    hcloud_server.primary
   ]
+
+  provisioner "remote-exec" {
+    inline = [
+      "cloud-init status --wait --long"
+    ]
+
+    connection {
+      host = "10.0.0.3"
+      private_key = file("~/.ssh/id_rsa")
+
+      bastion_host = hcloud_server.primary.ipv4_address
+      bastion_private_key = file("~/.ssh/id_rsa")
+    }
+  }
 }
 
 resource "hcloud_server" "node-2" {
@@ -28,8 +45,8 @@ resource "hcloud_server" "node-2" {
   ssh_keys = [hcloud_ssh_key.default.id]
 
   network {
-    network_id = hcloud_network.internal.id
-    ip         = "10.0.2.2"
+    network_id = hcloud_network.nat-network.id
+    ip         = "10.0.0.4"
   }
 
   public_net {
@@ -37,7 +54,24 @@ resource "hcloud_server" "node-2" {
     ipv6_enabled = false
   }
 
+  user_data = file("${path.module}/user_data-node.yaml")
+
   depends_on = [
-    hcloud_network_subnet.internal-subnet
+    hcloud_network_subnet.nat-network,
+    hcloud_server.primary
   ]
+
+  provisioner "remote-exec" {
+    inline = [
+      "cloud-init status --wait --long"
+    ]
+
+    connection {
+      host = "10.0.0.4"
+      private_key = file("~/.ssh/id_rsa")
+
+      bastion_host = hcloud_server.primary.ipv4_address
+      bastion_private_key = file("~/.ssh/id_rsa")
+    }
+  }
 }

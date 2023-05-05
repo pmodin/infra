@@ -1,0 +1,13 @@
+graph G {
+  rankdir=LR
+
+  subgraph "internal network" {
+    primary
+    "node-1"
+    "node-2"
+  }
+
+  internet -- primary
+  primary -- "node-1"
+  primary -- "node-2"
+}

@@ -2,7 +2,11 @@ terraform {
   required_providers {
     hcloud = {
       source = "hetznercloud/hcloud"
-      version = "1.36.2"
+      version = "1.38.2"
+    }
+    rke = {
+      source = "rancher/rke"
+      version = "1.3.4"
     }
   }
 }

@@ -12,16 +12,29 @@ resource "hcloud_server" "primary" {
   ssh_keys = [hcloud_ssh_key.default.id]
 
   network {
-    network_id = hcloud_network.internal.id
-    ip         = "10.0.1.1"
+    network_id = hcloud_network.nat-network.id
+    ip         = "10.0.0.2"
   }
 
   depends_on = [
-    hcloud_network_subnet.internal-subnet
+    hcloud_network_subnet.nat-network,
+    hcloud_network.nat-network
   ]
 
-  provisioner "local-exec" {
-    command = "ANSIBLE_HOST_KEY_CHECKING=False pipenv run ansible-playbook -u root -i '${self.ipv4_address},' ansible/postgres.yml"
+  user_data = file("${path.module}/user_data-primary.yaml")
+
+  //   provisioner "local-exec" {
+  //     command = "ANSIBLE_HOST_KEY_CHECKING=False pipenv run ansible-playbook -u root -i '${self.ipv4_address},' ansible/postgres.yml"
+  //   }
+  provisioner "remote-exec" {
+    inline = [
+      "cloud-init status --wait --long"
+    ]
+
+    connection {
+      host = "${self.ipv4_address}"
+      private_key = file("~/.ssh/id_rsa")
+    }
   }
 }
 

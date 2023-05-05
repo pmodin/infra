@@ -1,0 +1,14 @@
+#cloud-config
+package_update: true
+package_upgrade: true
+write_files:
+  - path: /etc/network/interfaces.d/99-nat
+    content: |
+      auto ens10
+      iface ens10 inet dhcp
+        post-up ip route add default via 10.0.0.1
+      dns-nameservers 1.1.1.1 1.0.0.1 8.8.8.8
+
+
+runcmd:
+# - reboot
