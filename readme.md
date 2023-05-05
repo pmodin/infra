@@ -12,6 +12,7 @@
 
 * should probably set up ansible instead of cloud-init, especially to adhere to
   reboots due to software updates on upgrade, but also to set up services
+* fix terraform to loop / not specify nodes explicitly
 
 ## prerequisites 
 
