@@ -13,7 +13,7 @@ resource "hcloud_server" "primary" {
 
   network {
     network_id = hcloud_network.nat_network.id
-    ip         = "10.0.0.2"
+    ip         = var.primary_internal_ip
   }
 
   depends_on = [
