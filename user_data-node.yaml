@@ -9,6 +9,5 @@ write_files:
         post-up ip route add default via 10.0.0.1
       dns-nameservers 1.1.1.1 1.0.0.1 8.8.8.8
 
-
 runcmd:
-# - reboot
+  - reboot
