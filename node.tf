@@ -1,4 +1,4 @@
-resource "hcloud_server" "node-1" {
+resource "hcloud_server" "node_1" {
   name = "node-1"
   datacenter    = "nbg1-dc3"
   server_type = "cx21"
@@ -6,7 +6,7 @@ resource "hcloud_server" "node-1" {
   ssh_keys = [hcloud_ssh_key.default.id]
 
   network {
-    network_id = hcloud_network.nat-network.id
+    network_id = hcloud_network.nat_network.id
     ip         = "10.0.0.3"
   }
 
@@ -18,7 +18,7 @@ resource "hcloud_server" "node-1" {
   user_data = file("${path.module}/user_data-node.yaml")
 
   depends_on = [
-    hcloud_network_subnet.nat-network,
+    hcloud_network_subnet.nat_network,
     hcloud_server.primary
   ]
 
@@ -37,7 +37,7 @@ resource "hcloud_server" "node-1" {
   }
 }
 
-resource "hcloud_server" "node-2" {
+resource "hcloud_server" "node_2" {
   name = "node-2"
   datacenter    = "nbg1-dc3"
   server_type = "cx21"
@@ -45,7 +45,7 @@ resource "hcloud_server" "node-2" {
   ssh_keys = [hcloud_ssh_key.default.id]
 
   network {
-    network_id = hcloud_network.nat-network.id
+    network_id = hcloud_network.nat_network.id
     ip         = "10.0.0.4"
   }
 
@@ -57,7 +57,7 @@ resource "hcloud_server" "node-2" {
   user_data = file("${path.module}/user_data-node.yaml")
 
   depends_on = [
-    hcloud_network_subnet.nat-network,
+    hcloud_network_subnet.nat_network,
     hcloud_server.primary
   ]
 

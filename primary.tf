@@ -12,13 +12,13 @@ resource "hcloud_server" "primary" {
   ssh_keys = [hcloud_ssh_key.default.id]
 
   network {
-    network_id = hcloud_network.nat-network.id
+    network_id = hcloud_network.nat_network.id
     ip         = "10.0.0.2"
   }
 
   depends_on = [
-    hcloud_network_subnet.nat-network,
-    hcloud_network.nat-network
+    hcloud_network_subnet.nat_network,
+    hcloud_network.nat_network
   ]
 
   user_data = file("${path.module}/user_data-primary.yaml")
